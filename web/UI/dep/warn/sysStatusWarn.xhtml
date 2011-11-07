@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .col-label {
+                width: 100px;
+                text-align: right;
+            }
+
+            .col-input {
+                width: 30px;
+            }
+        </style>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                }
+            }
+        </script>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div style="margin:5px;">
+            <h:form id="query">
+
+                <p:messages id="msgs" showDetail="false"/>
+                <p:panel id="logPanel" style="text-align:left" header="监控系统日志文件大小">
+                    <h:panelGrid columns="2" cellpadding="10" style="text-align: left">
+                    <h:outputText value="系统信息日志文件：#{sysStatusWarnAction.infoLog.fileName}"/>
+                    <h:outputText value="文件大小：#{sysStatusWarnAction.infoLog.fileSize}"/>
+                    <h:outputText value="系统异常日志文件：#{sysStatusWarnAction.errorLog.fileName}"/>
+                    <h:outputText value="文件大小：#{sysStatusWarnAction.errorLog.fileSize}"/>
+                    <h:outputText value="开发平台日志文件：#{sysStatusWarnAction.platformLog.fileName}"/>
+                    <h:outputText value="文件大小：#{sysStatusWarnAction.platformLog.fileSize}"/>
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:fieldset legend="服务器系统状态" toggleable="true">
+                    <p:dataGrid var="elmt" value="#{sysStatusWarnAction.elmtBeans}" columns="3"
+                                rows="6" paginator="true" effect="true">
+                        <f:facet name="header">服务器系统状态</f:facet>
+                        <p:column>
+                            <p:fieldset legend="#{elmt.elmtName}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%;text-align: center;">
+                                    <p:graphicImage style="width:50px;height:50px"
+                                                    value="/images/dep/#{elmt.picName}"/>
+
+                                    <h:outputText value="总容量：#{elmt.totalSize}"/>
+                                    <h:outputText value="可用量：#{elmt.freeSize}"/>
+                                    <h:outputText value="#{elmt.usedPart}">
+                                        <f:convertNumber pattern="利用率：###.##%"/>
+                                    </h:outputText>
+                                    <h:outputText value="是否警告：#{elmt.warnMsg}"/>
+                                </h:panelGrid>
+                            </p:fieldset>
+
+                        </p:column>
+
+                    </p:dataGrid>
+
+                </p:fieldset>
+                <p:ajaxStatus style="height:20px;text-align:center">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/ajaxloadingbar.gif"/>
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value=""/>
+                    </f:facet>
+                </p:ajaxStatus>
+
+
+            </h:form>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

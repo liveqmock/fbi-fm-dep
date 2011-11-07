@@ -1,9 +1,11 @@
 package skyline.service;
 
+import monitor.pojo.LogFileBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pub.platform.advance.utils.PropertyManager;
 import pub.platform.form.config.SystemAttributeNames;
 import pub.platform.security.OperatorManager;
 import skyline.repository.dao.*;
@@ -13,6 +15,9 @@ import skyline.repository.model.PtenudetailExample;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +55,35 @@ public class PlatformService {
             throw new RuntimeException("用户未登录！");
         }
         return om;
+    }
+
+    /*
+    dep.logfile.info=D:/dep/log/dep.log
+dep.logfile.error=D:/dep/log/error.log
+dep.logfile.platform=D:/dep/log/platform.log
+     */
+    public LogFileBean getInfoLogFileSize() throws IOException {
+        String filePath = PropertyManager.getProperty("skyline.logfile.info");
+        return getFileMSize(filePath);
+    }
+
+    public LogFileBean getErrorLogFileSize() throws IOException {
+        String filePath = PropertyManager.getProperty("skyline.logfile.error");
+        return getFileMSize(filePath);
+    }
+
+    public LogFileBean getPlatformLogFileSize() throws IOException {
+        String filePath = PropertyManager.getProperty("skyline.logfile.platform");
+        return getFileMSize(filePath);
+    }
+
+    private LogFileBean getFileMSize(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (file.exists()) {
+            FileInputStream fis = new FileInputStream(file);
+            return new LogFileBean(filePath, fis.available() / 1024 / 1024 + "M");
+        }
+        return new LogFileBean("文件不存在", "0M");
     }
 
     /**
