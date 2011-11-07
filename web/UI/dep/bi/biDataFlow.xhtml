@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .col-label {
+            }
+
+            .col-input {
+            }
+        </style>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                }
+            }
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+        <div style="margin:5px;">
+            <p:growl id="msgs" showDetail="false"/>
+
+            <p:panel header="接口数据流量统计">
+                <h:form id="query">
+                    <p:fieldset>
+                        <h:panelGrid id="detailPanel" columns="1" cellpadding="8" border="0">
+                            <h:panelGrid columns="7" columnClasses="col-label,col-input,col-label,col-input">
+
+                                <h:outputLabel value="数据接口："/>
+                                <h:selectOneMenu value="#{biDataFlowAction.opCode}" style="width: 220px;">
+                                    <f:selectItems value="#{biDataFlowAction.tradeCodeList}"/>
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="*起始时间："/>
+                                <p:inputMask mask="9999-99-99" value="#{biDataFlowAction.startDate}"
+                                             style="width:150px;" onfocus="this.select();" required="true"
+                                             requiredMessage="必须输入起始时间！"/>
+
+                                <h:outputLabel value="*截止时间："/>
+                                <p:inputMask mask="9999-99-99" value="#{biDataFlowAction.endDate}"
+                                             style="width:150px;" required="true"
+                                             requiredMessage="必须输入截止时间！"/>
+
+
+                                <p:commandButton id="qryBtn" update="pdt,msgs,chart" ajax="true"
+                                                 style="margin-left:20px;margin-top:1px;margin-bottom:1px;" value="查看"
+                                                 action="#{biDataFlowAction.showChart}"/>
+
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <p:ajaxStatus style="height:20px;text-align:center">
+                        <f:facet name="start">
+                            <h:graphicImage value="/images/ajaxloadingbar.gif"/>
+                        </f:facet>
+                        <f:facet name="complete">
+                            <h:outputText value=""/>
+                        </f:facet>
+                    </p:ajaxStatus>
+                    <p:fieldset legend="接口数据统计表" toggleable="true" toggleSpeed="500">
+                        <br/>
+                        <p:dataTable id="pdt" style="width:100%;"
+                                     dynamic="true" selectionMode="single"
+                                     value="#{biDataFlowAction.notifyMsgCntList}" var="record"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     rowsPerPageTemplate="100,50,30,15,5"
+                                     emptyMessage="数据记录为空...">
+
+                            <p:column headerText="银行代号" style="text-align:center">
+                                <h:outputText value="#{record.bankcode}"/>
+                            </p:column>
+                            <p:column headerText="银行名称" style="text-align:left">
+                                <h:outputText value="#{biDataFlowAction.bankMap[record.bankcode]}"/>
+                            </p:column>
+                            <p:column headerText="通信交易码" style="text-align:center">
+                                <h:outputText value="#{record.opcode}"/>
+                            </p:column>
+                            <p:column headerText="交易名称" style="text-align:left">
+                                <h:outputText value="#{biDataFlowAction.tradeMap[record.opcode]}"/>
+                            </p:column>
+                            <p:column headerText="交易总数" style="text-align:right">
+                                <h:outputText value="#{record.count}"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:fieldset>
+                    <p:fieldset legend="接口数据比例图" toggleable="true" toggleSpeed="500">
+                        <p:pieChart id="chart" model="#{biDataFlowAction.pieModel}" width="50%" live="false" />
+                    </p:fieldset>
+
+                </h:form>
+            </p:panel>
+        </div>
+    </ui:define>
+
+</ui:composition>

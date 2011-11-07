@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=" http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+             http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+             http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
+
+    <context:property-placeholder location="classpath:dep/resources/credit.properties"/>
+
+    <!-- enable component scanning (beware that this does not enable mapper scanning!) -->
+    <context:component-scan base-package="dep"/>
+
+    <!-- enable autowire -->
+    <context:annotation-config/>
+
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL">
+            <value>${fm.activemq.brokerURL}</value>
+        </property>
+    </bean>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="defaultDestinationName" value="${queue.response.fmqd}"/>
+        <property name="pubSubDomain" value="false"/>
+    </bean>
+
+
+    <bean id="fmqdListenerContainer"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="destinationName" value="${queue.request.dep}"/>
+        <property name="messageListener" ref="fmqdMessageListener"/>
+    </bean>
+
+    <jms:listener-container connection-factory="jmsConnectionFactory" concurrency="5">
+        <jms:listener destination="${queue.fm.from.313}" ref="bankMessageListener" selector="messageType='request'"/>
+        <jms:listener destination="${queue.fm.from.105}" ref="bankMessageListener" selector="messageType='request'"/>
+    </jms:listener-container>
+
+        <!--============================================================================-->
+
+    <!-- 配置数据库连接池 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${fmqd.platform.db.ConnectionManager.sDBDriver}"/>
+        <property name="url" value="${fmqd.platform.db.ConnectionManager.sConnStr}"/>
+        <property name="username" value="${fmqd.platform.db.ConnectionManager.user}"/>
+        <property name="password" value="${fmqd.platform.db.ConnectionManager.passwd}"/>
+        <property name="maxActive" value="15"/>
+        <property name="maxIdle" value="5"/>
+    </bean>
+
+
+    <!-- transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+     <bean id="depDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${dep.db.ConnectionManager.sDBDriver}"/>
+        <property name="url" value="${dep.db.ConnectionManager.sConnStr}"/>
+        <property name="username" value="${dep.db.ConnectionManager.user}"/>
+        <property name="password" value="${dep.db.ConnectionManager.passwd}"/>
+        <property name="maxActive" value="15"/>
+        <property name="maxIdle" value="5"/>
+    </bean>
+
+    <bean id="jdbcTemplate"
+         class="org.springframework.jdbc.core.JdbcTemplate">
+         <property name="dataSource" ref="depDataSource"/>
+    </bean>
+
+    <bean id="depTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="depDataSource"/>
+    </bean>
+
+    <!-- enable autowire -->
+    <context:annotation-config/>
+
+    <!--<tx:jta-transaction-manager />-->
+
+    <!-- enable transaction demarcation with annotations -->
+    <tx:annotation-driven/>
+
+    <!-- define the SqlSessionFactory, notice that configLocation is not needed when you use MapperFactoryBean -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:dep/fmqd/repository/mapper/**/*.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- scan for mappers and let them be autowired -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="dep.fmqd.repository.dao"/>
+    </bean>
+
+</beans>

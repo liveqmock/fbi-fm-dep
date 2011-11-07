@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .col-95 {
+                text-align: right;
+            }
+
+            .col-5 {
+                text-align: left;
+            }
+
+            .col-80 {
+            }
+
+            .col-20 {
+                width: 5%;
+            }
+        </style>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                }
+            }
+        </script>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div style="margin:5px;">
+            <p:growl id="msgs" showDetail="false"/>
+            <h:form>
+                <p:panel header="接口报文接收状态">
+                    <br/>
+                    <p:fieldset>
+                        <h:panelGrid id="detailPanel" columns="2" cellpadding="8" border="0" width="100%">
+                            <h:panelGrid columns="4" columnClasses="col-label,col-input,col-label,col-input"
+                                         width="80%">
+
+                                <h:outputLabel value="银行名称："/>
+                                <h:selectOneMenu value="#{biNotifyMsgAction.bankCode}" style="width: 206px;">
+                                    <f:selectItems value="#{biNotifyMsgAction.bankCodeList}"/>
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="数据接口："/>
+                                <h:selectOneMenu value="#{biNotifyMsgAction.opCode}" style="width: 206px;">
+                                    <f:selectItems value="#{biNotifyMsgAction.tradeCodeList}"/>
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="*起始时间："/>
+                                <p:inputMask mask="9999-99-99" value="#{biNotifyMsgAction.startDate}"
+                                             style="width:198px;" onfocus="this.select();" required="true"
+                                             requiredMessage="必须输入起始时间！"/>
+
+                                <h:outputLabel value="*截止时间："/>
+                                <p:inputMask mask="9999-99-99" value="#{biNotifyMsgAction.endDate}"
+                                             style="width:198px;" required="true"
+                                             requiredMessage="必须输入截止时间！"/>
+
+                            </h:panelGrid>
+                            <h:panelGrid style="text-align: left">
+                                <p:commandButton id="qryBtn" update="pdt,msgs,dtbl_ft" ajax="true"
+                                                 style="margin-left:10px;margin-top:1px;margin-bottom:1px;width=50px;"
+                                                 value="查询"
+                                                 action="#{biNotifyMsgAction.qryNotifyMsg}"/>
+
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <p:ajaxStatus style="height:20px;text-align:center">
+                        <f:facet name="start">
+                            <h:graphicImage value="/images/ajaxloadingbar.gif"/>
+                        </f:facet>
+                        <f:facet name="complete">
+                            <h:outputText value=""/>
+                        </f:facet>
+                    </p:ajaxStatus>
+                    <p:fieldset id="dtbl_ft"
+                                legend="#{biNotifyMsgAction.bankMap[biNotifyMsgAction.bankCode]}#{biNotifyMsgAction.opCode}接口消息状态表"
+                                toggleable="true" toggleSpeed="500">
+                        <br/>
+                        <p:dataTable id="pdt" style="width:100%;"
+                                     dynamic="true" selectionMode="single"
+                                     value="#{biNotifyMsgAction.notifyMessageList}" var="record"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginator="true" rows="10" paginatorPosition="bottom"
+                                     rowsPerPageTemplate="100,50,30,10,5"
+                                     emptyMessage="数据记录为空...">
+
+                            <p:column headerText="银行代号" style="text-align:center;">
+                                <h:outputText value="#{record.bankcode}"/>
+                            </p:column>
+                            <p:column headerText="银行名称" style="text-align:left">
+                                <h:outputText value="#{biNotifyMsgAction.bankMap[record.bankcode]}"/>
+                            </p:column>
+                            <p:column headerText="接口代码" style="text-align:center">
+                                <h:outputText value="#{record.opcode}"/>
+                            </p:column>
+                            <p:column headerText="接口名称" style="text-align:left">
+                                <h:outputText value="#{biNotifyMsgAction.tradeMap[record.opcode]}"/>
+                            </p:column>
+                            <p:column headerText="交易时间" style="text-align:center">
+                                <h:outputText value="#{record.notifydate}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="已被业务系统获取" style="text-align:center">
+                                <h:outputText value="#{biNotifyMsgAction.boolType.valueOfAlias(record.getFlag).title}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:fieldset>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

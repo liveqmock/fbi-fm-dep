@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .prdsetColumn {
+                width: 100%;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="trackFrom">
+        <div style="margin:5px">
+
+            <p:tabView style="font-weight:normal;font-style:normal">
+
+                <p:tab title="房地产监管接口监控子系统更新历史">
+                    <p:panel id="news" header="更新信息（2011年10月25日）">
+                        <p>2011年10月25日系统最新更新：</p>
+                        <div style="line-height:30px;">
+                            <ul>
+                                <li>1、更新监管中心接口版本 MQ 方案。</li>
+                                <li>2、新增系统业务菜单项。</li>
+                                <li>3、MQ系统监控。</li>
+                                <li>4、接口数据记录、统计、查询。</li>
+                            </ul>
+                        </div>
+
+                    </p:panel>
+                </p:tab>
+            </p:tabView>
+        </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
