@@ -1,16 +1,14 @@
 package monitor.view;
 
-import monitor.pojo.LogFileBean;
+import dep.common.BoolType;
 import monitor.pojo.SystemElmtBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.common.utils.MessageUtil;
 import skyline.service.OperatingSystemService;
-import skyline.service.PlatformService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,34 +27,36 @@ public class SysStatusWarnAction {
     private static Logger logger = LoggerFactory.getLogger(SysStatusWarnAction.class);
 
     private List<SystemElmtBean> elmtBeans;
-    private LogFileBean infoLog;
-    private LogFileBean errorLog;
-    private LogFileBean platformLog;
-
-    @ManagedProperty(value = "#{platformService}")
-    private PlatformService platformService;
+    private List<String> warningList;
 
     @PostConstruct
     public void init() {
         try {
-            qryLogfileSize();
             elmtBeans = OperatingSystemService.getAllSystemElmts();
+            initWarnings();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("系统状态监测异常！", e.getMessage());
             MessageUtil.addError("系统状态监测异常！");
             elmtBeans = new ArrayList<SystemElmtBean>();
         }
     }
 
-    private void qryLogfileSize() {
-        this.infoLog = platformService.getInfoLogFileSize();
-        this.errorLog = platformService.getErrorLogFileSize();
-        this.platformLog = platformService.getPlatformLogFileSize();
-    }
+    public void initWarnings() {
 
+        warningList = new ArrayList<String>();
+            for (SystemElmtBean elmt : elmtBeans) {
+                if (BoolType.TRUE.getCode().equals(elmt.getWarn().getCode())) {
+                    warningList.add(elmt.getElmtName() + "利用率过高！利用比例：" + String.format("%.2f", elmt.getUsedPart() * 100) + "%");
+                }
+            }
+            if (warningList.isEmpty()) {
+                warningList.add("暂无预警信息！服务器运行正常！");
+            }
+    }
     //============================================================
 
-    public List<SystemElmtBean> getElmtBeans() {
+    public List<SystemElmtBean> getElmtBeans
+            () {
         return elmtBeans;
     }
 
@@ -64,35 +64,11 @@ public class SysStatusWarnAction {
         this.elmtBeans = elmtBeans;
     }
 
-    public LogFileBean getErrorLog() {
-        return errorLog;
+    public List<String> getWarningList() {
+        return warningList;
     }
 
-    public void setErrorLog(LogFileBean errorLog) {
-        this.errorLog = errorLog;
-    }
-
-    public LogFileBean getInfoLog() {
-        return infoLog;
-    }
-
-    public void setInfoLog(LogFileBean infoLog) {
-        this.infoLog = infoLog;
-    }
-
-    public LogFileBean getPlatformLog() {
-        return platformLog;
-    }
-
-    public void setPlatformLog(LogFileBean platformLog) {
-        this.platformLog = platformLog;
-    }
-
-    public PlatformService getPlatformService() {
-        return platformService;
-    }
-
-    public void setPlatformService(PlatformService platformService) {
-        this.platformService = platformService;
+    public void setWarningList(List<String> warningList) {
+        this.warningList = warningList;
     }
 }

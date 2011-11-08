@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .input-col-m {
+                width: 60px;
+            }
+
+            .input-col-l {
+                width: 80px;
+            }
+
+            .input-col-xxl {
+                width: 1%;
+                text-align: right;
+            }
+
+            .col-95 {
+                text-align: right;
+            }
+
+            .col-5 {
+                text-align: left;
+            }
+        </style>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div style="margin:5px;">
+            <p:growl id="msgs" showDetail="false"/>
+            <h:form id="form">
+
+                <p:panel id="input" header="输入【#{deleteLogDetlAction.tablename}】表记录时间">
+                    <h:panelGrid columns="1">
+                        <h:panelGrid style="width: 100%" columns="4">
+                            <h:outputLabel value="*起始时间：" style="padding-left: 30px;"/>
+                            <p:inputMask mask="9999-99-99" value="#{deleteLogDetlAction.startDate}" size="30"
+                                         onfocus="this.select();" required="true"
+                                         requiredMessage="必须输入起始时间！"/>
+
+                            <h:outputLabel value="*截止时间："/>
+                            <p:inputMask mask="9999-99-99" value="#{deleteLogDetlAction.endDate}"
+                                         size="30" required="true"
+                                         requiredMessage="必须输入截止时间！"/>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:commandButton id="delBtn" ajax="true" value="删除"
+                                             action="#{deleteLogDetlAction.onDelete}"
+                                             style="margin-left:235px;width:90px"
+                                             update="input,msgs"/>
+                            <p:commandButton ajax="true" id="clsBtn" value="关闭" onclick="window.close();"
+                                             style="width:80px;margin-left:15px" update="input,msgs"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

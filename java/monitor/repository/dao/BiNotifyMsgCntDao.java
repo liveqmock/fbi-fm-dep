@@ -26,15 +26,6 @@ public class BiNotifyMsgCntDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    /*
-    select opcode,bankcode,count(*) cnt  from BI_NOTIFY_MESSAGE t
-    where opcode = '2005'
-    and bankcode = '313'
-    group by opcode,bankcode
-    having min(notifydate) >= to_date('2000-10-13','yyyy-MM-dd')
-    and max(notifydate) <= to_date('2011-11-13','yyyy-MM-dd')
-    order by opcode,bankcode;
-     */
     public List<BiNotifyMsgCnt> qryRecordsCnt(String opcode, String bankcode, String startDate, String endDate) {
         StringBuilder qrySqlBuilder = new StringBuilder(ConstSQL.QRY_BI_NOTIFYMSG_CNT);
         if(StringUtils.isEmpty(opcode)) {

@@ -30,23 +30,22 @@
     <ui:define name="content">
         <div style="margin:5px;">
             <h:form id="query">
-
-                <p:messages id="msgs" showDetail="false"/>
-                <p:panel id="logPanel" style="text-align:left" header="监控系统日志文件大小">
-                    <h:panelGrid columns="2" cellpadding="10" style="text-align: left">
-                    <h:outputText value="系统信息日志文件：#{sysStatusWarnAction.infoLog.fileName}"/>
-                    <h:outputText value="文件大小：#{sysStatusWarnAction.infoLog.fileSize}"/>
-                    <h:outputText value="系统异常日志文件：#{sysStatusWarnAction.errorLog.fileName}"/>
-                    <h:outputText value="文件大小：#{sysStatusWarnAction.errorLog.fileSize}"/>
-                    <h:outputText value="开发平台日志文件：#{sysStatusWarnAction.platformLog.fileName}"/>
-                    <h:outputText value="文件大小：#{sysStatusWarnAction.platformLog.fileSize}"/>
+                <p:growl id="msgs" showDetail="false"/>
+                <p:fieldset legend="服务器系统预警信息" toggleable="true">
+                    <h:panelGrid columns="2" cellpadding="30">
+                        <p:graphicImage value="/images/dep/warn1.jpg" style="width:70px;height:70px;"/>
+                        <h:panelGrid columns="1" style="font-size: 13px;">
+                            <p:dataList value="#{sysStatusWarnAction.warningList}"
+                                        var="warning" itemType="disc">
+                                #{warning}
+                            </p:dataList>
+                        </h:panelGrid>
                     </h:panelGrid>
-                </p:panel>
-
+                </p:fieldset>
                 <p:fieldset legend="服务器系统状态" toggleable="true">
+                    <br/>
                     <p:dataGrid var="elmt" value="#{sysStatusWarnAction.elmtBeans}" columns="3"
                                 rows="6" paginator="true" effect="true">
-                        <f:facet name="header">服务器系统状态</f:facet>
                         <p:column>
                             <p:fieldset legend="#{elmt.elmtName}" style="text-align:center">
                                 <h:panelGrid columns="1" style="width:100%;text-align: center;">
@@ -58,7 +57,7 @@
                                     <h:outputText value="#{elmt.usedPart}">
                                         <f:convertNumber pattern="利用率：###.##%"/>
                                     </h:outputText>
-                                    <h:outputText value="是否警告：#{elmt.warnMsg}"/>
+                                    <h:outputText value="是否警告：#{elmt.warn.title}"/>
                                 </h:panelGrid>
                             </p:fieldset>
 

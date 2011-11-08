@@ -16,4 +16,8 @@ public class ConstSQL {
     public static final String QRY_NOTIFY_MSG_LIST = "select * from bi_notify_message ";
 
     public static final String QRY_BI_NOTIFYMSG_CNT = " select opcode,bankcode,count(*) as count  from BI_NOTIFY_MESSAGE t ";
+
+    public static final String QRY_TBL_COUNT = " select count(*) as rdCount from ";
+
+    public static final String DELETE_TBL = " delete from ";
 }

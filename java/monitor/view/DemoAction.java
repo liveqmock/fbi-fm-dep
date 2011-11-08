@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,6 +23,7 @@ public class DemoAction {
 
     @PostConstruct
     public void init() {
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        String pkid = (String) context.getExternalContext().getRequestParameterMap().get("pkid");
     }
 }

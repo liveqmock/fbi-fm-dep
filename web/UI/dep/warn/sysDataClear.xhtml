@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .col-label {
+                width: 100px;
+                text-align: right;
+            }
+
+            .col-input {
+                width: 30px;
+            }
+        </style>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                }
+            }
+        </script>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div style="margin:5px;">
+            <h:form id="query">
+
+                <p:growl id="msgs" showDetail="false"/>
+                <p:fieldset style="text-align:left" legend="监控系统日志文件" toggleable="true">
+                    <h:panelGrid columns="2" cellpadding="10" style="text-align: left">
+                        <h:outputText value="系统日志目录：#{sysDataClearAction.logFolder.fileName}"/>
+                        <h:outputText value="目录大小：#{sysDataClearAction.logFolder.fileSize}"/>
+                        <p:separator/><p:separator/>
+                        <h:outputText value="系统信息日志文件：#{sysDataClearAction.infoLog.fileName}"/>
+                        <h:outputText value="文件大小：#{sysDataClearAction.infoLog.fileSize}"/>
+                        <h:outputText value="系统异常日志文件：#{sysDataClearAction.errorLog.fileName}"/>
+                        <h:outputText value="文件大小：#{sysDataClearAction.errorLog.fileSize}"/>
+                        <h:outputText value="开发平台日志文件：#{sysDataClearAction.platformLog.fileName}"/>
+                        <h:outputText value="文件大小：#{sysDataClearAction.platformLog.fileSize}"/>
+                    </h:panelGrid>
+                </p:fieldset>
+
+                <p:ajaxStatus style="height:20px;text-align:center">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/ajaxloadingbar.gif"/>
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value=""/>
+                    </f:facet>
+                </p:ajaxStatus>
+                <p:fieldset legend="系统运行信息日志列表" toggleable="true">
+                    <br/>
+                    <p:menubar>
+                        <p:menuitem type="push" value="删除所选项" icon="ui-icon ui-icon-close"
+                                    action="#{sysDataClearAction.delInfoRecords}" update="msgs,pdt1" ajax="true"/>
+                    </p:menubar>
+                    <p:dataTable id="pdt1" style="width:100%;"
+                                 dynamic="true" selection="#{sysDataClearAction.selectedRecords}"
+                                 value="#{sysDataClearAction.depLogList}" var="record"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true" rows="5" paginatorPosition="bottom"
+                                 rowsPerPageTemplate="100,50,30,10,5"
+                                 emptyMessage="数据记录为空...">
+                        <p:column selectionMode="multiple"/>
+                        <p:column headerText="文件名" style="text-align:center">
+                            <h:outputText value="#{record.fileName}"/>
+                        </p:column>
+                        <p:column headerText="文件大小" style="text-align:left">
+                            <h:outputText value="#{record.fileSize}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+                <p:fieldset legend="系统运行异常日志列表" toggleable="true">
+                    <br/>
+                    <p:menubar>
+                        <p:menuitem type="push" value="删除所选项" icon="ui-icon ui-icon-close"
+                                    action="#{sysDataClearAction.delErrorRecords}" update="msgs,pdt2" ajax="true"/>
+                    </p:menubar>
+                    <p:dataTable id="pdt2" style="width:100%;"
+                                 dynamic="true" selection="#{sysDataClearAction.selectedErrorRecords}"
+                                 value="#{sysDataClearAction.errorLogList}" var="record"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true" rows="5" paginatorPosition="bottom"
+                                 rowsPerPageTemplate="100,50,30,10,5"
+                                 emptyMessage="数据记录为空...">
+                        <p:column selectionMode="multiple"/>
+                        <p:column headerText="文件名" style="text-align:center">
+                            <h:outputText value="#{record.fileName}"/>
+                        </p:column>
+                        <p:column headerText="文件大小" style="text-align:left">
+                            <h:outputText value="#{record.fileSize}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+            </h:form>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

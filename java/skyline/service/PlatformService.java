@@ -17,7 +17,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,28 +64,95 @@ public class PlatformService {
 dep.logfile.error=D:/dep/log/error.log
 dep.logfile.platform=D:/dep/log/platform.log
      */
+    public LogFileBean getLogFolderStatus() throws IOException {
+        String filePath = PropertyManager.getProperty("skyline.logfile.path");
+        File logPath = new File(filePath);
+        LogFileBean logFileBean = new LogFileBean(filePath, String.format("%.2fK", getDirSize(logPath) * 1.0 / 1024));
+        return logFileBean;
+    }
+
     public LogFileBean getInfoLogFileSize() throws IOException {
         String filePath = PropertyManager.getProperty("skyline.logfile.info");
-        return getFileMSize(filePath);
+        return getFileSize(filePath);
     }
 
     public LogFileBean getErrorLogFileSize() throws IOException {
         String filePath = PropertyManager.getProperty("skyline.logfile.error");
-        return getFileMSize(filePath);
+        return getFileSize(filePath);
     }
 
     public LogFileBean getPlatformLogFileSize() throws IOException {
         String filePath = PropertyManager.getProperty("skyline.logfile.platform");
-        return getFileMSize(filePath);
+        return getFileSize(filePath);
     }
 
-    private LogFileBean getFileMSize(String filePath) throws IOException {
+    private LogFileBean getFileSize(String filePath) throws IOException {
         File file = new File(filePath);
         if (file.exists()) {
             FileInputStream fis = new FileInputStream(file);
-            return new LogFileBean(filePath, fis.available() / 1024 / 1024 + "M");
+            long filesize = fis.available();
+            LogFileBean logFileBean = new LogFileBean(filePath, String.format("%.2fK", filesize * 1.0 / 1024));
+            fis.close();
+            return logFileBean;
         }
         return new LogFileBean("文件不存在", "0M");
+    }
+
+    private static long getDirSize(File dir) {
+        if (dir == null) {
+            return 0;
+        }
+        if (!dir.isDirectory()) {
+            return 0;
+        }
+        long dirSize = 0;
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                dirSize += file.length();
+            } else if (file.isDirectory()) {
+                dirSize += file.length();
+                dirSize += getDirSize(file); // 如果遇到目录则通过递归调用继续统计
+            }
+        }
+        return dirSize;
+    }
+
+    // skyline.logfile.path=D:/dep/log/
+    public List<LogFileBean> getLogFiles() throws IOException {
+        String filePath = PropertyManager.getProperty("skyline.logfile.path");
+        File file = new File(filePath);
+        File[] logfiles = file.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.startsWith("dep.log.");
+            }
+        });
+        List<LogFileBean> logFileBeans = new ArrayList<LogFileBean>();
+        for (File logfile : logfiles) {
+            logFileBeans.add(getFileSize(logfile.getPath()));
+        }
+
+        return logFileBeans;
+    }
+
+
+    // skyline.logfile.path=D:/dep/log/
+    public List<LogFileBean> getErrorLogFiles() throws IOException {
+        String filePath = PropertyManager.getProperty("skyline.logfile.path");
+        File file = new File(filePath);
+        File[] logfiles = file.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.startsWith("error.log.");
+            }
+        });
+        List<LogFileBean> logFileBeans = new ArrayList<LogFileBean>();
+        for (File logfile : logfiles) {
+            logFileBeans.add(getFileSize(logfile.getPath()));
+        }
+
+        return logFileBeans;
     }
 
     /**

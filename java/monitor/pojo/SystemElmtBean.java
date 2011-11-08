@@ -1,5 +1,7 @@
 package monitor.pojo;
 
+import dep.common.BoolType;
+
 /**
  * Created by IntelliJ IDEA.
  * User: zhangxiaobo
@@ -16,8 +18,7 @@ public class SystemElmtBean {
     private String freeSize;    // 可用量（剩余）
     private double usedPart;    // 利用率
     private double warnPart = 0.1;  // 警戒比例
-    private boolean isWarn;   // 是否超越警戒
-    private String warnMsg;
+    private BoolType warn;   // 是否超越警戒
 
     public String getElmtName() {
         return elmtName;
@@ -57,8 +58,7 @@ public class SystemElmtBean {
 
     public void setUsedPart(double usedPart) {
         this.usedPart = usedPart;
-        this.isWarn = this.usedPart >= (1 - this.warnPart) ? true : false;
-        this.warnMsg = this.isWarn ? "是" : "否";
+        this.warn = this.usedPart >= (1 - this.warnPart) ? BoolType.TRUE : BoolType.FALSE;
     }
 
     public double getWarnPart() {
@@ -69,19 +69,11 @@ public class SystemElmtBean {
         this.warnPart = warnPart;
     }
 
-    public boolean isWarn() {
-        return isWarn;
+    public BoolType getWarn() {
+        return warn;
     }
 
-    public void setWarn(boolean warn) {
-        isWarn = warn;
-    }
-
-    public String getWarnMsg() {
-        return warnMsg;
-    }
-
-    public void setWarnMsg(String warnMsg) {
-        this.warnMsg = warnMsg;
+    public void setWarn(BoolType warn) {
+        this.warn = warn;
     }
 }
