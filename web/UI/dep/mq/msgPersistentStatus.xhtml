@@ -39,14 +39,19 @@
             <h:form>
                 <p:panel header="数据交换监控子系统">
                     <p:fieldset legend="消息持久化数据库信息" toggleable="true" toggleSpeed="500">
-                        <h:panelGrid columns="2" cellpadding="10">
+                        <h:panelGrid columns="3" cellpadding="10">
                             <p:graphicImage value="/images/dep/oracle.png"/>
-                            <h:panelGroup style="font-size: 13px">
-                                <h:outputText value="数据库：#{msgPstStatusAction.dbIP}"/><br/>
-                                <h:outputText value="用户：#{msgPstStatusAction.dbUser}"/><br/>
-                                <h:outputText value="密码：#{msgPstStatusAction.dbPassword}"/><br/>
-                                <h:outputText value="ActiveMQ持久消息表：activemq_msgs"/><br/>
-
+                            <h:panelGroup style="font-size: 13px;text-align: left">
+                                <h:outputText value="数据库："/><br/>
+                                <h:outputText value="用户："/><br/>
+                                <h:outputText value="密码："/><br/>
+                                <h:outputText value="ActiveMQ持久消息表："/><br/>
+                            </h:panelGroup>
+                            <h:panelGroup style="font-size: 13px;text-align: left">
+                                <h:outputText value="#{msgPstStatusAction.dbIP}"/><br/>
+                                <h:outputText value="#{msgPstStatusAction.dbUser}"/><br/>
+                                <h:outputText value="#{msgPstStatusAction.dbPassword}"/><br/>
+                                <h:outputText value="activemq_msgs"/><br/>
                             </h:panelGroup>
                         </h:panelGrid>
                     </p:fieldset>

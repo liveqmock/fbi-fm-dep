@@ -46,7 +46,7 @@ public class SysDbCountAction {
                 }
             }
             if (warningList.isEmpty()) {
-                warningList.add("暂无预警信息！");
+                warningList.add("数据库数据量正常，暂无预警信息！");
             }
     }
 

@@ -21,6 +21,8 @@
       <configuration>
         <fileset id="fileset1" name="My Fileset" removed="false">
           <file>file://$MODULE_DIR$/resources/applicationContext.xml</file>
+          <file>file://$MODULE_DIR$/web/WEB-INF/activemq-config.xml</file>
+          <file>file://$MODULE_DIR$/web/WEB-INF/activemq-broker.xml</file>
         </fileset>
       </configuration>
     </facet>

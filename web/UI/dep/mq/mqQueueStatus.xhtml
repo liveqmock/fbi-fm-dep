@@ -22,6 +22,13 @@
                 width: 5%;
             }
         </style>
+        <script type="text/javascript">
+            function doPopupWindow(obj) {
+                var queue = obj.parentNode.parentNode.childNodes[0].childNodes[0].innerHTML;
+                popupwindow = window.open("queueMessages.xhtml?queue=" + queue, "popupwindow", "height=400,width=800,left=300,top=200,toolbar=no,menubar=no,scrollbars=yes,location=no");
+                popupwindow.focus;
+            }
+        </script>
 
     </ui:define>
 
@@ -29,44 +36,76 @@
         <div style="margin:5px;">
             <p:growl id="msgs" showDetail="false"/>
             <h:form>
-                <p:panel header="数据交换监控子系统">
-                    <p:fieldset legend="消息持久化数据库信息" toggleable="true" toggleSpeed="500">
-                        <h:panelGrid columns="2" cellpadding="10">
-                            <p:graphicImage value="/images/dep/oracle.png"/>
-                            <h:panelGroup style="font-size: 13px">
-                                <h:outputText value="数据库：#{msgPstStatusAction.dbIP}"/><br/>
-                                <h:outputText value="用户：#{msgPstStatusAction.dbUser}"/><br/>
-                                <h:outputText value="密码：#{msgPstStatusAction.dbPassword}"/><br/>
-                                <h:outputText value="ActiveMQ持久消息表：activemq_msgs"/><br/>
-
+                <p:panel header="消息服务器基本信息">
+                        <h:panelGrid columns="3" cellpadding="10">
+                            <p:graphicImage value="/images/dep/activemq.png"/>
+                            <h:panelGroup style="font-size: 13px;text-align: left">
+                                <h:outputText value="Broker：" style="width:150px;"/><br/>
+                                <h:outputText value="主机名："/><br/>
+                                <h:outputText value="版本："/><br/>
+                                <h:outputText value="URL："/><br/>
+                            </h:panelGroup>
+                            <h:panelGroup style="font-size: 13px;text-align: left">
+                                <h:outputText value="#{sysQueueAction.brokerViewMBean.brokerId}" /><br/>
+                                <h:outputText value="#{sysQueueAction.brokerViewMBean.brokerName}"/><br/>
+                                <h:outputText value="#{sysQueueAction.brokerViewMBean.brokerVersion}"/><br/>
+                                <h:outputText value="#{sysQueueAction.brokerViewMBean.openWireURL}"/><br/>
                             </h:panelGroup>
                         </h:panelGrid>
-                    </p:fieldset>
-                    <br/>
-                    <p:fieldset legend="持久化数据库表信息" toggleable="true" toggleSpeed="500">
+                </p:panel>
+                    <p:fieldset legend="消息服务器远程连接状态" toggleable="true" toggleSpeed="500">
                         <br/>
                         <p:dataTable id="pdt" style="width:100%;"
                                      dynamic="true"
-                                     value="#{msgPstStatusAction.pstMsgList}" var="record"
+                                     value="#{sysQueueAction.connViewList}" var="record"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     paginator="true" rows="10" paginatorPosition="bottom"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
                                      rowsPerPageTemplate="100,50,30,10,5"
                                      emptyMessage="数据记录为空...">
 
-                            <p:column headerText="队列" style="text-align:center">
-                                <h:outputText value="#{record.container}"/>
+                            <p:column headerText="远程地址" style="text-align:center">
+                                <h:outputText value="#{record.remoteAddress}"/>
                             </p:column>
-                            <p:column headerText="消息ID" style="text-align:left">
-                                <h:outputText value="#{record.msgidProd}"/>
+                            <p:column headerText="激活" style="text-align:center">
+                                <h:outputText value="#{sysQueueAction.getBoolStatus(record.active)}"/>
                             </p:column>
-                            <p:column headerText="优先级" style="text-align:center">
-                                <h:outputText value="#{record.priority}"/>
+                            <p:column headerText="阻塞状态" style="text-align:center">
+                                <h:outputText value="#{sysQueueAction.getBoolStatus(record.blocked)}"/>
+                            </p:column>
+                            <p:column headerText="已连接" style="text-align:center">
+                                <h:outputText value="#{sysQueueAction.getBoolStatus(record.connected)}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:fieldset>
+                    <p:fieldset legend="消息服务器队列状态" toggleable="true" toggleSpeed="500">
+                        <br/>
+                        <p:dataTable id="pdt2" style="width:100%;"
+                                     dynamic="true"
+                                     value="#{sysQueueAction.queueViewList}" var="record"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     rowsPerPageTemplate="100,50,30,10,5"
+                                     emptyMessage="数据记录为空...">
+
+                            <p:column headerText="队列名" style="text-align:left">
+                                <p:commandLink value="#{record.name}" style="color:blue" update="popupwindow"
+                                                   onclick="doPopupWindow(this);"/>
+                            </p:column>
+                            <p:column headerText="生产者数" style="text-align:center">
+                                <h:outputText value="#{record.producerCount}"/>
+                            </p:column>
+                            <p:column headerText="消费者数" style="text-align:center">
+                                <h:outputText value="#{record.consumerCount}"/>
+                            </p:column>
+                            <p:column headerText="入列消息数" style="text-align:center">
+                                <h:outputText value="#{record.enqueueCount}"/>
+                            </p:column>
+                            <p:column headerText="出列消息数" style="text-align:center">
+                                <h:outputText value="#{record.dequeueCount}"/>
                             </p:column>
 
                         </p:dataTable>
-
                     </p:fieldset>
-                </p:panel>
             </h:form>
         </div>
     </ui:define>

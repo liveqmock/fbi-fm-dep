@@ -58,12 +58,13 @@ public class SysDataClearAction {
         this.infoLog = platformService.getInfoLogFileSize();
         this.errorLog = platformService.getErrorLogFileSize();
         this.platformLog = platformService.getPlatformLogFileSize();
-        this.logFolder = platformService.getLogFolderStatus();
+        //this.logFolder = platformService.getLogFolderStatus();
     }
 
     private void qryLogFiles() throws IOException {
         depLogList = platformService.getLogFiles();
         errorLogList = platformService.getErrorLogFiles();
+        this.logFolder = platformService.getLogFolderStatus();
     }
 
     public void delInfoRecords() {

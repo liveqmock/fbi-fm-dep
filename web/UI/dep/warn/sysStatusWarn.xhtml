@@ -31,51 +31,45 @@
         <div style="margin:5px;">
             <h:form id="query">
                 <p:growl id="msgs" showDetail="false"/>
-                <p:fieldset legend="服务器系统预警信息" toggleable="true">
-                    <h:panelGrid columns="2" cellpadding="30">
-                        <p:graphicImage value="/images/dep/warn1.jpg" style="width:70px;height:70px;"/>
-                        <h:panelGrid columns="1" style="font-size: 13px;">
-                            <p:dataList value="#{sysStatusWarnAction.warningList}"
-                                        var="warning" itemType="disc">
-                                #{warning}
-                            </p:dataList>
-                        </h:panelGrid>
-                    </h:panelGrid>
-                </p:fieldset>
-                <p:fieldset legend="服务器系统状态" toggleable="true">
+                <p:panel header="服务器系统状态详情">
                     <br/>
-                    <p:dataGrid var="elmt" value="#{sysStatusWarnAction.elmtBeans}" columns="3"
-                                rows="3" paginator="true" effect="true">
-                        <p:column>
-                            <p:fieldset legend="#{elmt.elmtName}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%;text-align: center;">
-                                    <p:graphicImage style="width:50px;height:50px"
-                                                    value="/images/dep/#{elmt.picName}"/>
+                    <p:fieldset legend="服务器系统预警信息" toggleable="true">
+                        <h:panelGrid columns="2" cellpadding="30">
+                            <p:graphicImage value="/images/dep/warn1.jpg" style="width:70px;height:70px;"/>
+                            <h:panelGrid columns="1" style="font-size: 13px;">
+                                <p:dataList value="#{sysStatusWarnAction.warningList}"
+                                            var="warning" itemType="disc">
+                                    #{warning}
+                                </p:dataList>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <br/>
+                    <p:fieldset legend="服务器系统状态" toggleable="true">
+                        <br/>
+                        <p:dataGrid var="elmt" value="#{sysStatusWarnAction.elmtBeans}" columns="3"
+                                    rows="3" paginator="true" effect="true" paginatorPosition="bottom">
+                            <p:column>
+                                <p:fieldset legend="#{elmt.elmtName}" style="text-align:center">
+                                    <h:panelGrid columns="1" style="width:100%;text-align: center;">
+                                        <p:graphicImage style="width:50px;height:50px"
+                                                        value="/images/dep/#{elmt.picName}"/>
 
-                                    <h:outputText value="总容量：#{elmt.totalSize}"/>
-                                    <h:outputText value="可用量：#{elmt.freeSize}"/>
-                                    <h:outputText value="#{elmt.usedPart}">
-                                        <f:convertNumber pattern="利用率：###.##%"/>
-                                    </h:outputText>
-                                    <h:outputText value="是否警告：#{elmt.warn.title}"/>
-                                </h:panelGrid>
-                            </p:fieldset>
+                                        <h:outputText value="总容量：#{elmt.totalSize}"/>
+                                        <h:outputText value="可用量：#{elmt.freeSize}"/>
+                                        <h:outputText value="#{elmt.usedPart}">
+                                            <f:convertNumber pattern="利用率：###.##%"/>
+                                        </h:outputText>
+                                        <h:outputText value="是否警告：#{elmt.warn.title}"/>
+                                    </h:panelGrid>
+                                </p:fieldset>
 
-                        </p:column>
+                            </p:column>
 
-                    </p:dataGrid>
+                        </p:dataGrid>
 
-                </p:fieldset>
-                <p:ajaxStatus style="height:20px;text-align:center">
-                    <f:facet name="start">
-                        <h:graphicImage value="/images/ajaxloadingbar.gif"/>
-                    </f:facet>
-                    <f:facet name="complete">
-                        <h:outputText value=""/>
-                    </f:facet>
-                </p:ajaxStatus>
-
-
+                    </p:fieldset>
+                </p:panel>
             </h:form>
 
         </div>

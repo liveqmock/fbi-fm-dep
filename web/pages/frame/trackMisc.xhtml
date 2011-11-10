@@ -14,26 +14,82 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="trackFrom">
-        <div style="margin:5px">
+            <div style="margin:5px">
 
-            <p:tabView style="font-weight:normal;font-style:normal">
+                <p:tabView>
+                    <p:tab title="数据交换平台监控">
+                        <br/>
+                        <p:fieldset>
+                            <h:panelGrid columns="2" cellpadding="5">
+                            <p:graphicImage value="/images/dep/warn3.png" style="width:30px;height:30px;"/>
+                             <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputLabel value="当前服务器状态："/>
+                                        <h:outputText id="status" value="#{mqStatusMngAction.status}"/>
+                                    </h:panelGrid>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <br/>
+                        <p:fieldset legend="系统预警信息" toggleable="true">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:graphicImage value="/images/dep/warn1.jpg" style="width:70px;height:70px;"/>
+                                <h:panelGrid columns="1" style="font-size: 13px;">
+                                    <p:dataList value="#{sysDbCountAction.warningList}"
+                                                var="warning" itemType="disc">
+                                        #{warning}
+                                    </p:dataList>
+                                    <h:panelGroup style="font-size: 13px;">
+                                        <p:dataList value="#{sysStatusWarnAction.warningList}"
+                                                    var="warning" itemType="disc">
+                                            #{warning}
+                                        </p:dataList>
+                                    </h:panelGroup>
 
-                <p:tab title="房地产监管接口监控子系统更新历史">
-                    <p:panel id="news" header="更新信息（2011年10月25日）">
-                        <p>2011年10月25日系统最新更新：</p>
-                        <div style="line-height:30px;">
-                            <ul>
-                                <li>1、更新监管中心接口版本 MQ 方案。</li>
-                                <li>2、新增系统业务菜单项。</li>
-                                <li>3、MQ系统监控。</li>
-                                <li>4、接口数据记录、统计、查询。</li>
-                            </ul>
-                        </div>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <br/>
+                        <p:fieldset legend="服务器系统状态" toggleable="true">
+                            <br/>
+                            <p:dataGrid var="elmt" value="#{sysStatusWarnAction.elmtBeans}" columns="3"
+                                        rows="3" paginator="true" effect="true" paginatorPosition="bottom">
+                                <p:column>
+                                    <p:fieldset legend="#{elmt.elmtName}" style="text-align:center">
+                                        <h:panelGrid columns="1" style="width:100%;text-align: center;">
+                                            <p:graphicImage style="width:50px;height:50px"
+                                                            value="/images/dep/#{elmt.picName}"/>
 
-                    </p:panel>
-                </p:tab>
-            </p:tabView>
-        </div>
+                                            <h:outputText value="总容量：#{elmt.totalSize}"/>
+                                            <h:outputText value="可用量：#{elmt.freeSize}"/>
+                                            <h:outputText value="#{elmt.usedPart}">
+                                                <f:convertNumber pattern="利用率：###.##%"/>
+                                            </h:outputText>
+                                            <h:outputText value="是否警告：#{elmt.warn.title}"/>
+                                        </h:panelGrid>
+                                    </p:fieldset>
+
+                                </p:column>
+
+                            </p:dataGrid>
+
+                        </p:fieldset>
+
+                    </p:tab>
+                    <p:tab title="系统更新历史">
+                        <p:fieldset id="news" legend="更新信息（2011年11月10日）" toggleable="true" toggleSpeed="500">
+                            <p>2011年11月10日系统最新更新：</p>
+
+                            <div style="line-height:30px;">
+                                <ul>
+                                    <li>1、更新监管中心接口版本 MQ 方案。</li>
+                                    <li>2、新增系统业务菜单项。</li>
+                                    <li>3、ActiveMQ系统监控。</li>
+                                    <li>4、接口数据记录、统计、查询。</li>
+                                </ul>
+                            </div>
+                        </p:fieldset>
+                    </p:tab>
+                </p:tabView>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>

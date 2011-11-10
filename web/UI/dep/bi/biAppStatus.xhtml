@@ -41,19 +41,19 @@
                                      rowsPerPageTemplate="100,50,30,15,5"
                                      emptyMessage="数据记录为空...">
 
-                            <p:column headerText="银行代号" style="text-align:center">
+                            <p:column headerText="银行代号" style="text-align:center" sortBy="#{record.bankcode}">
                                 <h:outputText value="#{record.bankcode}"/>
                             </p:column>
                             <p:column headerText="银行名称" style="text-align:left">
                                 <h:outputText value="#{biAppStatusAction.bankMap[record.bankcode]}"/>
                             </p:column>
-                            <p:column headerText="接口代码" style="text-align:center">
+                            <p:column headerText="接口代码" style="text-align:center" sortBy="#{record.opcode}">
                                 <h:outputText value="#{record.opcode}"/>
                             </p:column>
                             <p:column headerText="接口名称" style="text-align:left">
                                 <h:outputText value="#{biAppStatusAction.tradeMap[record.opcode]}"/>
                             </p:column>
-                            <p:column headerText="最近交易时间" style="text-align:center">
+                            <p:column headerText="最近交易时间" style="text-align:center" sortBy="#{record.notifydate}">
                                 <h:outputText value="#{record.notifydate}">
                                         <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
                                 </h:outputText>
