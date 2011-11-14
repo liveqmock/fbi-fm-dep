@@ -5,6 +5,8 @@ import monitor.repository.model.BiNotifyMessage;
 import monitor.service.BiNotifyMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.common.utils.DateFormatter;
+import skyline.common.utils.MessageUtil;
 import skyline.service.PlatformService;
 import skyline.service.ToolsService;
 
@@ -35,8 +37,8 @@ public class BiNotifyMsgAction {
 
      private String opCode;
     private String bankCode;
-    private String startDate;
-    private String endDate;
+    private String startDate = DateFormatter.getSdfdate6() + "-01";
+    private String endDate = DateFormatter.getSdfdate8();
 
     private List<SelectItem> tradeCodeList;
     private List<SelectItem> bankCodeList;
@@ -58,6 +60,9 @@ public class BiNotifyMsgAction {
 
     public void qryNotifyMsg() {
         notifyMessageList = biNotifyMessageService.qryRecords(opCode, bankCode, startDate, endDate);
+        if (notifyMessageList.isEmpty()) {
+            MessageUtil.addWarn("查询数据记录结果为空！");
+        }
     }
 
     public BiNotifyMessageService getBiNotifyMessageService() {

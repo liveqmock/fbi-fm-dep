@@ -5,6 +5,8 @@ import monitor.service.BiNotifyMsgCntService;
 import org.primefaces.model.chart.PieChartModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.common.utils.DateFormatter;
+import skyline.common.utils.MessageUtil;
 import skyline.service.PlatformService;
 import skyline.service.ToolsService;
 
@@ -31,8 +33,8 @@ public class BiDataFlowAction {
 
     private String opCode;
     private String bankCode;
-    private String startDate;
-    private String endDate;
+    private String startDate = DateFormatter.getSdfdate6() + "-01";
+    private String endDate = DateFormatter.getSdfdate8();
 
     private List<SelectItem> tradeCodeList;
     private List<SelectItem> bankCodeList;
@@ -61,6 +63,9 @@ public class BiDataFlowAction {
     public String showChart() {
        //notifyMsgCntList = biNotifyMsgCntService.qryRecordsCnt("2005", bankCode, startDate, endDate);
         notifyMsgCntList = biNotifyMsgCntService.qryRecordsCnt(opCode, bankCode, startDate, endDate);
+        if (notifyMsgCntList.isEmpty()) {
+            MessageUtil.addWarn("查询数据记录结果为空！");
+        }
         if(pieModel != null) {
             pieModel = new PieChartModel();
         }

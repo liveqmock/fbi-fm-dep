@@ -137,7 +137,8 @@
     <tr width="100%" height="50px" style="margin-bottom: 0px;margin-top:0px;margin:0px;padding:0px">
         <td width="50%" style="height:50" colspan="4">
             &nbsp;&nbsp;
-            <img  src="../../images/top_logo_haierfip.gif" width="150px" height="50px" >
+            <img  src="../../images/sys.png" width="55px" height="50px" >
+            <img  src="../../images/systitle.jpg"height="40px" >
             <%--<img src="../../images/pamstitle.jpg" height="50px">--%>
         </td>
         <td width="50%" style="height:50;text-align:right" colspan="1">

@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 
 public class DateFormatter {
 
+    static private SimpleDateFormat sdfdate6 = new SimpleDateFormat("yyyy-MM");
     static private SimpleDateFormat sdfdate8 = new SimpleDateFormat("yyyyMMdd");
     static private SimpleDateFormat sdfdate10 = new SimpleDateFormat("yyyy-MM-dd");
     static private SimpleDateFormat sdftime6 = new SimpleDateFormat("HHmmss");
@@ -20,6 +21,10 @@ public class DateFormatter {
         cal.add(GregorianCalendar.DATE, days);
         Date thatDate = cal.getTime();
         return sdfdate10.format(thatDate);
+    }
+
+    public static String getSdfdate6() {
+        return sdfdate6.format(new Date());
     }
 
     public static String getDatetime14() {

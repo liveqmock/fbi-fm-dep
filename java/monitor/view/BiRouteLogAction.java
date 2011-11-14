@@ -5,6 +5,7 @@ import monitor.repository.model.DepBirouteLog;
 import monitor.service.BiRouteLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.common.utils.DateFormatter;
 import skyline.common.utils.MessageUtil;
 import skyline.service.PlatformService;
 import skyline.service.ToolsService;
@@ -37,8 +38,8 @@ public class BiRouteLogAction {
 
     private String opCode;
     private String bankCode;
-    private String startDate;
-    private String endDate;
+    private String startDate = DateFormatter.getSdfdate6() + "-01";
+    private String endDate = DateFormatter.getSdfdate8();
 
     private BoolType boolType = BoolType.TRUE;
 
@@ -68,6 +69,9 @@ public class BiRouteLogAction {
     public void qryLogList() {
         try {
             logList = biRouteLogService.qryRecords(opCode, bankCode, startDate, endDate);
+            if (logList.isEmpty()) {
+                MessageUtil.addWarn("查询数据记录结果为空！");
+            }
         } catch (ParseException e) {
             MessageUtil.addError("日期输入错误，请检查日期格式！");
         }
