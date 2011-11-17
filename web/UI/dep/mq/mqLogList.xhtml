@@ -41,6 +41,14 @@
                         </h:panelGrid>
                     </p:fieldset>
                     <br/>
+                    <p:ajaxStatus style="height:20px;text-align:center">
+                        <f:facet name="start">
+                            <h:graphicImage value="/images/ajaxloadingbar.gif"/>
+                        </f:facet>
+                        <f:facet name="complete">
+                            <h:outputText value=""/>
+                        </f:facet>
+                    </p:ajaxStatus>
                     <p:fieldset legend="操作日志表信息" toggleable="true" toggleSpeed="500">
                          <br/>
                         <p:menubar>

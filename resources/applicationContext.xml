@@ -61,4 +61,31 @@
                   value="skyline.repository.dao,monitor.repository.dao"/>
     </bean>
 
+    <!--quartz-->
+    <!-- 自动检测系统预警信息 -->
+    <bean id="sysEventScanJobDetailBean"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="sysEventScannerService"/>
+        <property name="targetMethod" value="warnAllElmts"/>
+    </bean>
+    <bean id="eventScanCronTriggerBean" lazy-init="false" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="sysEventScanJobDetailBean"/>
+        <property name="cronExpression" value="0 03 17 * * ?"/>
+    </bean>
+
+    <!-- 设置调度 -->
+    <bean id="depScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="eventScanCronTriggerBean"/>
+            </list>
+        </property>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.threadPool.threadCount">5</prop>
+                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+            </props>
+        </property>
+    </bean>
+
 </beans>

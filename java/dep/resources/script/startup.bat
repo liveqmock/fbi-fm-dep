@@ -3,6 +3,6 @@
 SETLOCAL  EnableDelayedExpansion
 
     call setenv.bat
-	java DEPLauncher
+	java dep.DEPLauncher
 
 ENDLOCAL

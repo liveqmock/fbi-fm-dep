@@ -1,4 +1,4 @@
-package monitor.common;
+package monitor.pojo;
 
 /**
  * Created by IntelliJ IDEA.

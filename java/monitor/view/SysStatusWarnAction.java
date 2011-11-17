@@ -44,14 +44,14 @@ public class SysStatusWarnAction {
     public void initWarnings() {
 
         warningList = new ArrayList<String>();
-            for (SystemElmtBean elmt : elmtBeans) {
-                if (BoolType.TRUE.getCode().equals(elmt.getWarn().getCode())) {
-                    warningList.add(elmt.getElmtName() + "利用率过高！利用比例：" + String.format("%.2f", elmt.getUsedPart() * 100) + "%");
-                }
+        for (SystemElmtBean elmt : elmtBeans) {
+            if (BoolType.TRUE.getCode().equals(elmt.getWarn().getCode())) {
+                warningList.add(elmt.getElmtName() + "利用率过高！利用比例：" + String.format("%.2f", elmt.getUsedPart() * 100) + "%");
             }
-            if (warningList.isEmpty()) {
-                warningList.add("暂无预警信息！服务器运行正常！");
-            }
+        }
+        if (warningList.isEmpty()) {
+            warningList.add("暂无预警信息！服务器运行正常！");
+        }
     }
     //============================================================
 

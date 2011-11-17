@@ -1,7 +1,7 @@
 package monitor.view;
 
 import monitor.common.BoolType;
-import monitor.common.QueueMessage;
+import monitor.pojo.QueueMessage;
 import org.apache.activemq.broker.jmx.BrokerViewMBean;
 import org.apache.activemq.broker.jmx.ConnectionViewMBean;
 import org.apache.activemq.broker.jmx.QueueViewMBean;
@@ -10,6 +10,7 @@ import org.apache.activemq.web.config.SystemPropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pub.platform.advance.utils.PropertyManager;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -39,12 +40,13 @@ public class SysQueueAction {
     private BoolType boolType = BoolType.TRUE;
     private String queue;
     private List<QueueMessage> queueMsgList;
+    private static String mqIP = PropertyManager.getProperty("dep.activemq.ip");
 
     @PostConstruct
     public void init() {
 
         RemoteJMXBrokerFacade createConnector = new RemoteJMXBrokerFacade();
-        System.setProperty("webconsole.jmx.url", "service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi");
+        System.setProperty("webconsole.jmx.url", "service:jmx:rmi:///jndi/rmi://" + mqIP + ":1099/jmxrmi");
         //System.setProperty("webconsole.jmx.user", "admin");
         //System.setProperty("webconsole.jmx.password", "activemq");
         SystemPropertiesConfiguration configuration = new SystemPropertiesConfiguration();
@@ -56,16 +58,16 @@ public class SysQueueAction {
             FacesContext context = FacesContext.getCurrentInstance();
             queue = (String) context.getExternalContext().getRequestParameterMap().get("queue");
             if (!StringUtils.isEmpty(queue)) {
-                 queueMsgList = new ArrayList<QueueMessage>();
-                 List<CompositeDataSupport> cdsList = (List<CompositeDataSupport>)createConnector.getQueue(queue.trim()).browseMessages();
+                queueMsgList = new ArrayList<QueueMessage>();
+                List<CompositeDataSupport> cdsList = (List<CompositeDataSupport>) createConnector.getQueue(queue.trim()).browseMessages();
                 QueueMessage qm = null;
                 for (CompositeDataSupport cds : cdsList) {
-                     qm = new QueueMessage();
-                     qm.setMessageId((String)cds.get("JMSMessageID"));
-                     String text = (String)cds.get("Text");
-                     qm.setSendTime(text.substring(0, 19));
-                     qm.setText(text.substring(19, 40));
-                     queueMsgList.add(qm);
+                    qm = new QueueMessage();
+                    qm.setMessageId((String) cds.get("JMSMessageID"));
+                    String text = (String) cds.get("Text");
+                    qm.setSendTime(text.substring(0, 19));
+                    qm.setText(text.substring(19, 40));
+                    queueMsgList.add(qm);
                 }
             }
 

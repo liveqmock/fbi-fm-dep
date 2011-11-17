@@ -48,7 +48,6 @@ public class SysDataClearAction {
             qryLogfileSize();
             qryLogFiles();
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("读取系统日志文件大小异常！", e.getMessage());
             MessageUtil.addError("读取系统日志文件大小异常！");
         }
