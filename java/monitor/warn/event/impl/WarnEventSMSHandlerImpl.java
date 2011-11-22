@@ -2,6 +2,10 @@ package monitor.warn.event.impl;
 
 import monitor.warn.event.WarnEvent;
 import monitor.warn.event.WarnEventHandler;
+import monitor.warn.event.jms.JmsMessenger;
+
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,7 +17,7 @@ import monitor.warn.event.WarnEventHandler;
 public class WarnEventSMSHandlerImpl implements WarnEventHandler {
 
     @Override
-    public void onWarn(WarnEvent warnEvent) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void onWarn(WarnEvent warnEvent) throws NamingException, JMSException {
+        JmsMessenger.getInstance().sendMsg(warnEvent.getWarnType(), warnEvent.getEventDesc()+warnEvent.getWarnMsg());
     }
 }

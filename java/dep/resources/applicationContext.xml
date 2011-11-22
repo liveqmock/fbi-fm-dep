@@ -43,6 +43,7 @@
     </bean>
 
     <jms:listener-container connection-factory="jmsConnectionFactory" concurrency="5">
+
         <jms:listener destination="${queue.fm.from.313}" ref="bankMessageListener" selector="messageType='request'"/>
         <jms:listener destination="${queue.fm.from.105}" ref="bankMessageListener" selector="messageType='request'"/>
     </jms:listener-container>

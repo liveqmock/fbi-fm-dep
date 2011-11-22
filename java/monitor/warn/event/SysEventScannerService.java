@@ -45,7 +45,7 @@ public class SysEventScannerService {
         try {
             for (WarnEvent event : warnEventList) {
                 if (event != null && event.isSendWarnMsg()) {
-                    event.sendWarnMsg();
+                    event.start();
                 }
             }
         } catch (Exception e) {

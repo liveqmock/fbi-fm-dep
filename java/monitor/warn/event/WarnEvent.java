@@ -31,6 +31,7 @@ public class WarnEvent {
             } else if (WarnType.SMS.getCode().equals(warnType.getCode())) {
                 eventHandler = new WarnEventSMSHandlerImpl();
             }
+            //eventHandler.onWarn(this);
         }
     }
 
@@ -74,7 +75,7 @@ public class WarnEvent {
         this.eventHandler = eventHandler;
     }
 
-    public void sendWarnMsg() throws Exception {
+    public void start() throws Exception {
         this.eventHandler.onWarn(this);
     }
 }
