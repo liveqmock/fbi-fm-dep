@@ -61,52 +61,11 @@
                   value="skyline.repository.dao,monitor.repository.dao"/>
     </bean>
 
-    <!--quartz-->
-    <!-- 自动检测系统预警信息 -->
-
-    <!-- <bean id="sysEventScanJobDetailBean"
-          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="systemEventWarnHandler"/>
-        <property name="targetMethod" value="handleWarn"/>
-    </bean>
-    <bean id="eventScanCronTriggerBean" lazy-init="false" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="sysEventScanJobDetailBean"/>
-        <property name="cronExpression" value="0 01 14 * * ?"/>
-    </bean>
-
-    &lt;!&ndash; 设置调度 &ndash;&gt;
-    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="triggers">
-            <list>
-                <ref bean="eventScanCronTriggerBean"/>
-            </list>
-        </property>
-        <property name="quartzProperties">
-            <props>
-                <prop key="org.quartz.threadPool.threadCount">5</prop>
-                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
-            </props>
-        </property>
-    </bean>-->
-
     <!--     Quartz 数据库持久化集群设置 -->
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
         <property name="configLocation" value="classpath:quartz.properties"/>
-    </bean>
-    <bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass">
-            <value>monitor.warn.scheduler.SysQuartzJobBean</value>
-        </property>
-
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="simpleService">
-                    <ref bean="simpleService"/>
-                </entry>
-            </map>
-        </property>
     </bean>
 
 </beans>

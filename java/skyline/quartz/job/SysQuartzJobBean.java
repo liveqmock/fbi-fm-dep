@@ -1,4 +1,4 @@
-package monitor.warn.scheduler;
+package skyline.quartz.job;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -7,16 +7,9 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public class SysQuartzJobBean extends QuartzJobBean {
 
-    private SimpleService simpleService;
-
-    public void setSimpleService(SimpleService simpleService) {
-        this.simpleService = simpleService;
-    }
-
     @Override
     protected void executeInternal(JobExecutionContext jobexecutioncontext) throws JobExecutionException {
         Trigger trigger = jobexecutioncontext.getTrigger();
-        simpleService.testMethod("============== 当前CronExpression ： " + trigger.getPreviousFireTime() + "======" + trigger.getNextFireTime());
+        System.out.println("============== 业务" + trigger.getJobName() +"执行过程====== 上次执行时间" + trigger.getPreviousFireTime() + "======下次执行时间" + trigger.getNextFireTime());
     }
-
 }

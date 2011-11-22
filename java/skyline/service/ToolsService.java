@@ -2,15 +2,12 @@ package skyline.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.common.utils.CmdExecuteThread;
-import skyline.repository.model.Ptenudetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import skyline.common.utils.CmdExecuteThread;
+import skyline.repository.model.Ptenudetail;
 
 import javax.faces.model.SelectItem;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class ToolsService {
 
     private static Logger logger = LoggerFactory.getLogger(ToolsService.class);
     @Autowired
-    PlatformService platformService;
+    private PlatformService platformService;
 
 
     /**

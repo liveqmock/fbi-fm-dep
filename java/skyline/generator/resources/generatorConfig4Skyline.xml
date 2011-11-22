@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="/svn-haierfip/ref/ojdbc6.jar"/>
+    <classPathEntry location="/fmdep/lib/ojdbc6.jar"/>
 
     <!--信息-->
     <context id="AllInfo" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
                         connectionURL="jdbc:oracle:thin:@localhost:1521:orcl"
-                        userId="skyline"
-                        password="skyline">
+                        userId="dep"
+                        password="dep">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -31,7 +31,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--平台类 -->
+       <!--平台类 -->
         <!--
         <table tableName="ptdept"/>
         <table tableName="ptenudetail"/>
@@ -56,8 +56,6 @@
             <columnOverride column="" jdbcType="TIMESTAMP"/>
         </table>
         -->
-
-
     </context>
 
 </generatorConfiguration>
