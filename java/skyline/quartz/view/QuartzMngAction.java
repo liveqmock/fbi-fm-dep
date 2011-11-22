@@ -34,6 +34,7 @@ public class QuartzMngAction {
 
     private List<QrtzTrigerJob> qrtzTrigerJobs;
     private QrtzTrigerJob[] selectedRecords;
+    private JobStatusType JobStatus = JobStatusType.PAUSED;
 
 
     @PostConstruct
@@ -135,5 +136,13 @@ public class QuartzMngAction {
 
     public void setSchedulerService(SchedulerService schedulerService) {
         this.schedulerService = schedulerService;
+    }
+
+    public JobStatusType getJobStatus() {
+        return JobStatus;
+    }
+
+    public void setJobStatus(JobStatusType jobStatus) {
+        JobStatus = jobStatus;
     }
 }
