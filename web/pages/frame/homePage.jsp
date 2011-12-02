@@ -8,7 +8,7 @@
 <script language="javascript" src="./js/basic.js"></script>
 <html>
 <head>
-    <title>数据交换平台监控</title>
+    <title>数据交换平台监控系统</title>
     <link href="<%=contextPath%>/css/ccb.css" type="text/css" rel="stylesheet">
     <meta content="mshtml 6.00.2800.1106" name="generator">
 </head>
