@@ -111,6 +111,7 @@
             parentObj.style.height = document.body.clientHeight - 2;
             dhxAccord.setSizes();
         }
+
     </script>
 
 </head>

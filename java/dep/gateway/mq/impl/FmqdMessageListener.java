@@ -51,11 +51,13 @@ public class FmqdMessageListener implements MessageListener {
             logger.info("=== DEP接收来自FMQD的报文 ====\r\n" + msgContent);
             // 发送到银行端并同步等待接收数据
 
-            String bankCode = StringHelper.getSubstrBetweenStrs(msgContent, "<BankCode>", "</BankCode>");
-            if ((!mqBanks.isEmpty()) && mqBanks.contains(bankCode)) {
-                strMsg = realtimeMQService.sendAndRecvForFmqd(msgContent);
-                realtimeMQService.decryptAndSendToFmqd(strMsg, msgId);
-            } else if ((!socketBanks.isEmpty()) && socketBanks.contains(bankCode)) {
+//            String bankCode = StringHelper.getSubstrBetweenStrs(msgContent, "<BankCode>", "</BankCode>");
+            //if ((!mqBanks.isEmpty()) && mqBanks.contains(bankCode)) {
+            strMsg = realtimeMQService.sendAndRecvForFmqd(msgContent);
+            logger.info(strMsg);
+            realtimeMQService.decryptAndSendToFmqd(strMsg, msgId);
+            //} else
+             /*if ((!socketBanks.isEmpty()) && socketBanks.contains(bankCode)) {
                 // 发送到MBP，并接收新报文
                 SimpleSocket l_ss = new SimpleSocket(mbpIP, mbpPORT, mbpTIMEOUT);
                 if (!l_ss.go(msgContent)) {
@@ -68,7 +70,7 @@ public class FmqdMessageListener implements MessageListener {
                 }
                 // TODO 接收到明文，直接转发回FMQD
                 realtimeMQService.directSendToFmqd(strMsg, msgId);
-            }
+            }*/
 
         } catch (JMSException e) {
             logger.error("FMQD消息监听异常", e.getMessage());

@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,33 +40,43 @@ public class BankMessageListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
 
-            DepBirouteLog routeLog = biRouteLogService.insertRecord(message);
+        /*try {
+            TextMessage txtMsg = (TextMessage) message;
+            logger.info(txtMsg.getText());
+            realtimeMQService.sendToBank("302", new CommonRes().toXml(), message.getJMSMessageID());
+            return;
+        } catch (JMSException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }*/
 
-            String msgContent = biRouteLogService.getMessageContent();
-            logger.info("DEP接收报文：" + msgContent);
+        // -----------------------------
 
-            int rtnResult = 0;
-            CommonRes res = new CommonRes();
-            String notifyMsgId = null;
-            try {
-                rtnResult = biDbService.handleMessage(routeLog.getOpcode(), msgContent);
-                if (rtnResult != 1) {
-                    res.head.RetCode = "9999";
-                    res.head.RetMsg = "接收失败！";
-                } else {
-                    // 保存NotifyMsg
-                    notifyMsgId = biNotifyMsgService.insertRecord(routeLog.getOpcode(), routeLog.getBankcode());
-                }
-            } catch (Exception e) {
+        DepBirouteLog routeLog = biRouteLogService.insertRecord(message);
+
+        String msgContent = biRouteLogService.getMessageContent();
+
+        int rtnResult = 0;
+        CommonRes res = new CommonRes();
+        String notifyMsgId = null;
+        try {
+            rtnResult = biDbService.handleMessage(routeLog.getOpcode(), msgContent);
+            if (rtnResult != 1) {
                 res.head.RetCode = "9999";
-                res.head.RetMsg = "接收失败！" + e.getMessage();
+                res.head.RetMsg = "接收失败！";
+            } else {
+                // 保存NotifyMsg
+                notifyMsgId = biNotifyMsgService.insertRecord(routeLog.getOpcode(), routeLog.getBankcode());
             }
+        } catch (Exception e) {
+            res.head.RetCode = "9999";
+            res.head.RetMsg = "接收失败！" + e.getMessage();
+        }
 
-            realtimeMQService.sendToBank(routeLog.getBankcode(), res.toXml(), routeLog.getMsgId());
+        realtimeMQService.sendToBank(routeLog.getBankcode(), res.toXml(), routeLog.getMsgId());
 
-            // 更新NotifyMsg
-            biNotifyMsgService.updateGetflag(notifyMsgId);
-            //  根据pkid 更新接口表路由状态
-            biRouteLogService.updateRtncodeByPkid(routeLog.getPkid(), res.head.RetCode);
+        // 更新NotifyMsg
+        biNotifyMsgService.updateGetflag(notifyMsgId);
+        //  根据pkid 更新接口表路由状态
+        biRouteLogService.updateRtncodeByPkid(routeLog.getPkid(), res.head.RetCode);
     }
 }

@@ -69,7 +69,7 @@ public class BiRouteLogService {
             biRouteDao.insertRecord(routeLog);
 
         } catch (Exception e) {
-            logger.error("保存报文到接口路由表失败！", e.getMessage());
+            logger.error("保存报文到接口路由表失败！", e);
             routeLog = null;
         }
         return routeLog;

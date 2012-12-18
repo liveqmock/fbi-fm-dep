@@ -81,5 +81,16 @@ public class DesCrypter {
         return new String(decryptBytes);
     }
 
+    public static void main(String[] args) {
+        String str = "abc123";
+        try {
+            String mi = DesCrypter.getInstance().encrypt(str);
+            System.out.println(mi);
+            String ming = DesCrypter.getInstance().decrypt(mi);
+            System.out.println(ming);
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 
 }

@@ -31,17 +31,16 @@ public class DeCryptMessageCreator extends MessageCreatorAdapter {
     @Override
     public Message createMessage(Session session) {
 
-        String miContent = null;
-
+        String mingContent = null;
         try {
-            miContent = DesCrypter.getInstance().decrypt(msgContent);
+            mingContent = DesCrypter.getInstance().decrypt(msgContent);
         } catch (Exception e) {
-            logger.error("DesCrypter解密异常！", e.getMessage());
+            logger.error("DesCrypter解密异常！", e);
             throw new RuntimeException("DesCrypter解密异常！" + e.getMessage());
         }
         TextMessage textMessage = null;
         try {
-            textMessage = session.createTextMessage(miContent);
+            textMessage = session.createTextMessage(mingContent);
             textMessage.setJMSCorrelationID(corelationMessageId);
             message = textMessage;
         } catch (JMSException e) {

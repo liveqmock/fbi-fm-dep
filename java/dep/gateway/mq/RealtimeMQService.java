@@ -35,11 +35,13 @@ public class RealtimeMQService {
         String bankCode = StringHelper.getSubstrBetweenStrs(strMsg, "<BankCode>", "</BankCode>");
         String queueName = PropertyManager.getProperty("queue.fm.to." + bankCode);
 
-        EnCryptMessageCreator cryptMessageCreator = new EnCryptMessageCreator(strMsg);
+        EnCryptMessageCreator cryptMessageCreator = new EnCryptMessageCreator(strMsg, null, true);
         jmsTemplate.send(queueName, cryptMessageCreator);
 
         String createdMessageId = cryptMessageCreator.getCreatedMessageId();
         jmsTemplate.setReceiveTimeout(RECV_TIMEOUT);
+
+        queueName = PropertyManager.getProperty("queue.fm.from." + bankCode);
         TextMessage message = (TextMessage)jmsTemplate.receiveSelected(queueName, "JMSCorrelationID = '" + createdMessageId
                 + "' and messageType = 'response'");
         String rtnMsg = (message == null)? null : message.getText();
@@ -61,7 +63,7 @@ public class RealtimeMQService {
 
     public void sendToBank(String bankCode, String strMsg, String corelationId) {
 
-        String queueName = PropertyManager.getProperty("queue.fm.from." + bankCode);
+        String queueName = PropertyManager.getProperty("queue.fm.to." + bankCode).trim();
         EnCryptMessageCreator cryptMessageCreator = new EnCryptMessageCreator(strMsg, corelationId, false);
         jmsTemplate.send(queueName, cryptMessageCreator);
     }

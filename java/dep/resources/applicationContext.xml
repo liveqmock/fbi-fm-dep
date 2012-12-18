@@ -44,7 +44,10 @@
 
     <jms:listener-container connection-factory="jmsConnectionFactory" concurrency="5">
 
-        <jms:listener destination="${queue.fm.from.313}" ref="bankMessageListener" selector="messageType='request'"/>
+        <jms:listener destination="${queue.fm.from.302}" ref="bankMessageListener" selector="messageType='request'"/>
+        <jms:listener destination="${queue.fm.from.102}" ref="bankMessageListener" selector="messageType='request'"/>
+        <jms:listener destination="${queue.fm.from.103}" ref="bankMessageListener" selector="messageType='request'"/>
+        <jms:listener destination="${queue.fm.from.104}" ref="bankMessageListener" selector="messageType='request'"/>
         <jms:listener destination="${queue.fm.from.105}" ref="bankMessageListener" selector="messageType='request'"/>
     </jms:listener-container>
 
