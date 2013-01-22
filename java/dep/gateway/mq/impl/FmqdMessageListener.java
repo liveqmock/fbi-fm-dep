@@ -54,7 +54,6 @@ public class FmqdMessageListener implements MessageListener {
 //            String bankCode = StringHelper.getSubstrBetweenStrs(msgContent, "<BankCode>", "</BankCode>");
             //if ((!mqBanks.isEmpty()) && mqBanks.contains(bankCode)) {
             strMsg = realtimeMQService.sendAndRecvForFmqd(msgContent);
-            logger.info(strMsg);
             realtimeMQService.decryptAndSendToFmqd(strMsg, msgId);
             //} else
              /*if ((!socketBanks.isEmpty()) && socketBanks.contains(bankCode)) {

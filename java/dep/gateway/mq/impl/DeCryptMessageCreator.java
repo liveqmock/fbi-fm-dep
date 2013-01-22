@@ -34,6 +34,7 @@ public class DeCryptMessageCreator extends MessageCreatorAdapter {
         String mingContent = null;
         try {
             mingContent = DesCrypter.getInstance().decrypt(msgContent);
+            logger.info(mingContent);
         } catch (Exception e) {
             logger.error("DesCrypter解密异常！", e);
             throw new RuntimeException("DesCrypter解密异常！" + e.getMessage());

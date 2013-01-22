@@ -47,6 +47,7 @@ public class BiRouteLogService {
             TextMessage textMessage = (TextMessage) message;
             messageContent = DesCrypter.getInstance().decrypt(textMessage.getText());
 
+            logger.info(messageContent);
             String bankCode = StringHelper.getSubstrBetweenStrs(messageContent, "<BankCode>", "</BankCode>");
             String opCode = StringHelper.getSubstrBetweenStrs(messageContent, "<OpCode>", "</OpCode>");
 
